@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/agil/cpp/hello_world/build",
+  "command": "/bin/x86_64-linux-gnu-g++-9    -g   -o CMakeFiles/hello_world.dir/main.cpp.o -c /home/agil/cpp/hello_world/main.cpp",
+  "file": "/home/agil/cpp/hello_world/main.cpp"
+}
+]
