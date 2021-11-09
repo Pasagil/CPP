@@ -1,0 +1,18 @@
+On peut empêcher la modification d'une variable en la déclarant "const"
+On peut créer une référence dans une variable : "int& ref_a = a" ; 
+modifier la référence modifie aussi a !
+
+Une fonction crée une copie de ses arguments avant de s'appliquer.
+On peut appliquer une fonction à la référence d'une variable : "calcul(&p)"
+la variable est alors modifiée !
+
+En C basique, c'était plus compliqué : il fallait appliquer la fonction 
+au pointeur int* = p ; on accède à la valeur entière p avec *p
+La fonction crée alors une copie de l'adresse mémoire de p, donc finit par 
+modifier p.
+
+Il faut toujours utiliser des références pour éviter de tout recopier !!!
+
+Pour le 10/11 :
+programmer une calculatrice polonaise inversée en utilisant les std::strings
+et les std::vectors
