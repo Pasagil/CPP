@@ -6,6 +6,7 @@
 #include "screen.h"
 #include "board.h"
 #include "keyboard.h"
+#include "CSnakeSegment.h"
 
 #define UP_ARROW    65
 #define LEFT_ARROW  68
@@ -21,10 +22,9 @@ std::vector<snake_segment_st> snake_segments;
 
 int main(int, char**) {
     std::cout << "Snake starting...\n";
-
+    CSnakeSegment snake = CSnakeSegment(snake_size);
     keyboard_init();
-
-    int x = 0,y = 0;
+    int board_size = 15;
 
     std::chrono::steady_clock::time_point last_move = std::chrono::steady_clock::now();
 
@@ -35,7 +35,7 @@ int main(int, char**) {
 
         screen_clear();
         board_clear(snake_board);
-        board_set_pixel(snake_board, x, y);
+        board_set_pixel(snake_board, snake.get_body(), board_size);
         screen_draw_board(snake_board);
 
         long ellapsedms = 0;
@@ -45,11 +45,7 @@ int main(int, char**) {
         if (ellapsedms > 500)
         {
             // Simulation d'un déplacement automatique/calculé
-            x++;
-            if (x >= 10)
-            {
-            x= 1;
-            }
+            snake.move();
             // Fin simulation
 
             last_move = std::chrono::steady_clock::now();
@@ -60,23 +56,33 @@ int main(int, char**) {
         int key_scan = keyboard_scan();
         if (key_scan == UP_ARROW)
         {
-            x--;
+            snake.change_direction(8);
+            snake.move();
+            
         }
         else if (key_scan == DOWN_ARROW)
         {
-            x++;
+            snake.change_direction(2);
+            snake.move();
         }
         else if (key_scan == LEFT_ARROW)
         {
-            y--;
+            snake.change_direction(4);
+            snake.move();
         }
         else if (key_scan == RIGHT_ARROW)
         {
-            y++;
+            snake.change_direction(6);
+            snake.move();
         }
         // Contrôle  des limites
-        if (x < 0) x=0;
-        if (y < 0) y=0;
+        std::pair<int,int> coords = snake.get_head();
+        if (coords.first > board_size or coords.first < 0 or coords.second > board_size or coords.second < 0) 
+        {
+            std::cout << "YOU LOSE AHAH LOOOOOOSER";
+            snake.reset(snake_size);
+        }
+
 
 
         // Exemple d'attente si besoin était (attention, suspend entièrement l'application)

@@ -3,6 +3,4 @@
 
 void snake_init()
 {
-
-
 }

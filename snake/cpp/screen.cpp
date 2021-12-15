@@ -23,7 +23,8 @@ void screen_draw_board(const std::map<std::pair<int,int>,bool> &board)
         // (1,1) en haut a gauche
         // x = row, y = column
         std::cout << "\x1b["<<x << ";"<< y <<";H";
-        std::cout << "*";
+        if (bdummy == true) {std::cout << "☻";}
+        else {std::cout << "-";}
 
     }
 
