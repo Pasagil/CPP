@@ -1,0 +1,1 @@
+On ne définit jamais d'attibuts publiques dans une classe, ils sont destinés à être encapsulés dans la classe uniquement!
