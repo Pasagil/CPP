@@ -21,6 +21,7 @@ public:
     std::pair<int,int> get_head();
     void reset(int snake_size);
     void grow();
+    bool hit();
 };
 
 

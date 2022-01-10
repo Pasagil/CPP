@@ -31,13 +31,6 @@ int main(int, char**) {
     while (true)
     {
 
-        // Affichage de la scène
-
-        screen_clear();
-        board_clear(snake_board);
-        board_set_pixel(snake_board, snake.get_body(), board_size);
-        screen_draw_board(snake_board);
-
         long ellapsedms = 0;
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
@@ -77,13 +70,20 @@ int main(int, char**) {
         }
         // Contrôle  des limites
         std::pair<int,int> coords = snake.get_head();
-        if (coords.first > board_size or coords.first < 0 or coords.second > board_size or coords.second < 0) 
+        if (coords.first >= board_size or coords.first <= 0 or coords.second >= board_size or coords.second <= 0
+            or snake.hit())        
         {
             std::cout << "YOU LOSE AHAH LOOOOOOSER";
             snake.reset(snake_size);
         }
 
 
+       // Affichage de la scène
+
+        screen_clear();
+        board_clear(snake_board);
+        board_set_pixel(snake_board, snake.get_body(), board_size);
+        screen_draw_board(snake_board);
 
         // Exemple d'attente si besoin était (attention, suspend entièrement l'application)
         //std::this_thread::sleep_for (std::chrono::milliseconds(100));

@@ -1,8 +1,9 @@
 #include "CSnakeSegment.h"
+#include <iostream>
 
 CSnakeSegment::CSnakeSegment(int size)
 {
-    for (int i=0 ; i<size ; i++) {body.push_back(std::make_pair(size-i-1,0));}
+    for (int i=0 ; i<size ; i++) {body.push_back(std::make_pair(1,size-i));}
 }
 
 CSnakeSegment::~CSnakeSegment()
@@ -47,7 +48,7 @@ void CSnakeSegment::move()
 
 void CSnakeSegment::change_direction(int dir)
 {
-    direction = dir;
+    if (dir + direction != 10) {direction = dir;}
 }
 
 std::pair<int,int> CSnakeSegment::get_head(){
@@ -58,10 +59,26 @@ void CSnakeSegment::reset(int snake_size)
 {
     size = snake_size;
     body = {};
-    for (int i=0 ; i<size ; i++) {body.push_back(std::make_pair(size-i-1,0));}
+    for (int i=0 ; i<size ; i++) {body.push_back(std::make_pair(1,size-i));}
 }
 
 void CSnakeSegment::grow()
 {
     size ++;
+}
+
+bool CSnakeSegment::hit()
+{
+
+    std::vector<std::pair<int,int>> snake_body = get_body();
+    snake_body = std::vector<std::pair<int,int>> (snake_body.begin()+1, snake_body.end());
+    std::pair<int,int> snake_head = get_head();
+    for (std::pair<int,int> pair : snake_body)
+    {
+        if (pair == snake_head)
+        {
+            return true;
+        }
+    }
+    return false;
 }
