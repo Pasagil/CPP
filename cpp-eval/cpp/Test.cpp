@@ -1,8 +1,13 @@
-#include "test.h"
+#include "Test.h"
+#include <iostream>
 int test(bool b)
 {
     if (b)
     {
+        std::vector<float> lin = std::vector<float> (2,3);
+        std::vector<std::vector<float>> content = std::vector<std::vector<float>> (2,lin);
+        Matrix mat0 = Matrix(content);
+        mat0.print();
         Matrix mat1 = Matrix(2,2,1);
         Matrix mat2 = Matrix(2,2,1);
         mat1.print();
@@ -19,7 +24,13 @@ int test(bool b)
         Identity.print();
         Identity.Id();
         Identity.print();
+        Matrix line0 = Identity.line(0);
+        line0.print();
+        Matrix col1 = Identity.col(1);
+        col1.print();
+        Identity.add_col(col);
+        Identity.print();
         return 0;
     }
-    else (return 0);
+    return 0;
 }

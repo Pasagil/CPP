@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 include(CTest)
 enable_testing()
 
-include_directories("./includes")
+include_directories("./includes") 
 
 FILE(GLOB mainSources *.cpp)
 FILE(GLOB cppSources cpp/*.cpp)

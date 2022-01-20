@@ -1,13 +1,15 @@
 #include "Matrix.h"
+#include "math.h"
 #include <iostream>
+#include <fstream>
 
-Matrix::Matrix(std::vector<std::vector<float>> cols)      // from a vector of vectors
+Matrix::Matrix(std::vector<std::vector<float>> const lines)      // from a vector of vectors
 {
-    content = cols;
-    shape = std::make_pair(content.size(), content[1].size());
+    content = lines;
+    shape = std::make_pair(content.size(), content[0].size());
 }
 
-Matrix::Matrix(int lines, int cols, float value)
+Matrix::Matrix(int const  lines, int const cols, float const value)
 {
     content = {};
     for (int i = 0 ; i<lines ; i++) {
@@ -16,7 +18,7 @@ Matrix::Matrix(int lines, int cols, float value)
     shape = std::make_pair(lines, cols);
 }
 
-Matrix::Matrix(std::pair<int,int> shape, float value)
+Matrix::Matrix(std::pair<int,int> const shape, float const value)
 {
     content = {};
     for (int i = 0 ; i<shape.first ; i++) {
@@ -38,20 +40,20 @@ void Matrix::Id()
             if (i == j) (set(i,i,1));
             else (set(i,j,0));
         }
-    }
+    } 
 }
 
-std::pair<int,int> Matrix::get_shape()
+std::pair<int,int> Matrix::get_shape() const
 {
     return shape;
 }
 
-std::vector<float> Matrix::operator [] (int i)
+std::vector<float> Matrix::operator [] (const int i) const
 {
     return content[i];
 }
 
-Matrix Matrix::operator + (const float a)
+Matrix Matrix::operator + (const float a) const
 {
     Matrix res = Matrix(shape);
         for (int i = 0 ; i<shape.first ; i++){
@@ -62,7 +64,7 @@ Matrix Matrix::operator + (const float a)
         return res;
 }
 
-Matrix Matrix::operator - (const float a)
+Matrix Matrix::operator - (const float a) const
 {
     return *this + (-a);
 }
@@ -71,7 +73,7 @@ Matrix Matrix::operator - (const float a)
     return *this * (-1);
 }
  */
-Matrix Matrix::operator * (const float a)
+Matrix Matrix::operator * (const float a) const
 {
     Matrix res = Matrix(shape);
         for (int i = 0 ; i<shape.first ; i++){
@@ -82,7 +84,7 @@ Matrix Matrix::operator * (const float a)
         return res;
 }
 
-Matrix Matrix::operator + (Matrix &other)
+Matrix Matrix::operator + (Matrix const &other) const
 {
     if (other.get_shape() != shape) {
         std::cout<<"Error : shapes must be the same \n";
@@ -101,13 +103,13 @@ Matrix Matrix::operator + (Matrix &other)
     }
 }
 
-Matrix Matrix::operator - (Matrix &other)
+Matrix Matrix::operator - (Matrix const &other) const
 {
     Matrix temp = other * (-1);
-    return *this + other;
+    return *this + temp;
 }
 
-Matrix Matrix :: operator * (Matrix &other)
+Matrix Matrix :: operator * (Matrix const &other) const
 {
     std::pair<int,int> const other_shape = other.get_shape();
     if (other_shape.first != shape.second) {
@@ -134,7 +136,7 @@ Matrix Matrix :: operator * (Matrix &other)
 }
 
 
-void Matrix::print()
+void Matrix::print() const
 {
     for (int i = 0 ; i<shape.first ; i++) {
         std::cout<<"\n";
@@ -145,7 +147,7 @@ void Matrix::print()
     std::cout<<"\n";
 }
 
-Matrix Matrix::transpose()
+Matrix Matrix::transpose() const
 {
     Matrix res = Matrix(shape.second, shape.first);
     for (int i = 0 ; i < shape.first ; i++)
@@ -156,9 +158,45 @@ Matrix Matrix::transpose()
         }
     }
     return res;
-
 }
 
-Matrix::~Matrix(){
+Matrix Matrix::line(int i) const{
+    return Matrix(std::vector<std::vector<float>> (1, content[i]));
+}
 
+Matrix Matrix::col(int j) const {
+    return transpose().line(j).transpose();
+}
+
+float Matrix::norm() const {
+    float s = 0;
+    for (int i = 0 ; i<shape.first ; i++){
+        s = s + pow(content[i][0], 2);
+    }
+    return s;
+}
+
+void Matrix::add_col(Matrix const &col) {
+    for (int i = 0 ; i<col.shape.first ; i++){
+        content[i].push_back(col.content[i][0]);
+    }
+    shape = std::make_pair(shape.first, shape.second +1);   
+    }
+
+void Matrix::WriteToFile(const std::string &file_name) const
+{
+    std::ofstream out(std::string("./data/") + file_name);
+
+    unsigned int k = 0;
+    for (unsigned int i = 0; i < shape.first; i++)
+    {
+        for (unsigned int j = 0; j < shape.second; j++)
+        {
+            out << content[i][j] << ",";
+        }
+        out << "\n";
+    }
+}
+    
+Matrix::~Matrix(){
 }
