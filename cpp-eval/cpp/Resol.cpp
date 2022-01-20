@@ -38,16 +38,13 @@ void Resol::set_D(bool const constant)
         );
     }
     else {
-    //the random device that will seed the generator
-    std::random_device seeder;
-    //then make a mersenne twister engine
-    std::mt19937 engine(seeder());
-    //then the easy part... the distribution
-    std::uniform_int_distribution<int> dist(5, 15);
-    //then just generate the integer like this:
+    //génération d'un nombre aléatoire 
+    std::random_device seeder;                              //on crée la seed du générateur
+    std::mt19937 engine(seeder());                          //on l'utilise pour créer le générateur
+    std::uniform_int_distribution<int> dist(5, 15);         //on crée la distribution
+    
     for (int i = 0 ; i < Nx ; i++){
         D[i] = float(dist(engine)) / float(10);
-        std::cout<<D[i]<<std::endl;
         }
     }
 }
@@ -58,8 +55,8 @@ void Resol::set_K()
     for (int i = 0 ; i < Nx ; i++)
     {
         for (int j = 0 ; j < Nx ; j++)
-        {
-            if (j == i-1) (K.set(i,j,-D[i]));
+        {                                                               //formule de l'énoncé
+            if (j == i-1) (K.set(i,j,-D[i]));                  
             else if (j == i) (K.set(i,i,-(-D[i] - D[i+1])));
             else if (j == i+1) (K.set(i,j,-D[i+1]));
         }
@@ -96,23 +93,15 @@ Matrix Resol::gradient_conjugue(Matrix const &A, Matrix const &B){
 
 Matrix Resol::euler_explicit()
 {
-    Matrix T = Matrix(std::vector<std::vector<float>> (1,x)).transpose();
-    Matrix col_init = Matrix(std::vector<std::vector<float>> (1,init)).transpose();
+    Matrix T = Matrix(std::vector<std::vector<float>> (1,x)).transpose();           //première colonne qui servira d'index plus tard
+    Matrix col_init = Matrix(std::vector<std::vector<float>> (1,init)).transpose(); //conditions initiales
     T.add_col(col_init);
      for (int i = 1 ; i < Nt ; i++){
-        // Matrix T_col = T.col(i);
-        // Matrix m1 = K * T_col;
-        // Matrix m2 = m1 * dt;
-        // Matrix col = T_col - m2;
-        Matrix col = T.col(i) - (K * T.col(i) *dt);
-        col.set(0,0,0);
+        Matrix col = T.col(i) - (K * T.col(i) *dt);         //on calcule la prochaine colonne d'après le schéma
+        col.set(0,0,0);                                     //on impose les conditions limites
         col.set(Nx-1,0,0);
-
-        // Matrix m2 = m1 *
-        // Matrix col = T_col - ((K * T_col) * dt);
         T.add_col(col);
     }
-
     return T;
 }
 
@@ -121,9 +110,9 @@ Matrix Resol::euler_implicit(){
     Matrix col_init = Matrix(std::vector<std::vector<float>> (1,init)).transpose();
     T.add_col(col_init);
      for (int i = 1 ; i < Nt ; i++){
-         Matrix A = Matrix(K.get_shape());
-         A.Id();
-         Matrix col = gradient_conjugue((K * dt) + A, T.col(i));
+         Matrix I = Matrix(K.get_shape());
+         I.Id();
+         Matrix col = gradient_conjugue((K * dt) + I, T.col(i));
          col.set(0,0,0);
          col.set(Nx-1,0,0);
          T.add_col(col);

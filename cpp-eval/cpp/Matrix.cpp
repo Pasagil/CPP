@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-Matrix::Matrix(std::vector<std::vector<float>> const lines)      // from a vector of vectors
+Matrix::Matrix(std::vector<std::vector<float>> const lines)     
 {
     content = lines;
     shape = std::make_pair(content.size(), content[0].size());
@@ -66,13 +66,9 @@ Matrix Matrix::operator + (const float a) const
 
 Matrix Matrix::operator - (const float a) const
 {
-    return *this + (-a);
+    return *this + (-a);                           
 }
 
-/* Matrix Matrix::operator -(){
-    return *this * (-1);
-}
- */
 Matrix Matrix::operator * (const float a) const
 {
     Matrix res = Matrix(shape);
@@ -86,8 +82,8 @@ Matrix Matrix::operator * (const float a) const
 
 Matrix Matrix::operator + (Matrix const &other) const
 {
-    if (other.get_shape() != shape) {
-        std::cout<<"Error : shapes must be the same \n";
+    if (other.get_shape() != shape) {                       //si les tailles ne correspondent pas, on renvoie une matrice nulle
+        std::cout<<"Error : shapes must be the same \n";    //de la taille de la matrice de gauche
         Matrix res = Matrix(shape);
         return res;
         }
@@ -113,9 +109,9 @@ Matrix Matrix :: operator * (Matrix const &other) const
 {
     std::pair<int,int> const other_shape = other.get_shape();
     if (other_shape.first != shape.second) {
-        std::cout<<"Error : shapes must be the same \n";
+        std::cout<<"Error : shapes must be (n,m),(m,l) \n";
         Matrix res = Matrix(shape);
-        return res;
+        return res;                                         
         }
 
     else {

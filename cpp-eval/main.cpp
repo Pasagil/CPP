@@ -8,16 +8,12 @@
 
 int main()
 {
-    test(false);
+    test(true);
     Resol res_const = Resol(0.05,0.01,true);
     Matrix T_expl_const = res_const.euler_explicit();
     T_expl_const.WriteToFile(std::string("T_expl_const.csv"));
     Matrix T_impl_const = res_const.euler_implicit();
     T_impl_const.WriteToFile(std::string("T_impl_const.csv"));
-    // std::vector<int> x = T_expl_const.get_x();
-    // for (int i = 0; i < T_expl_const.get_shape().second ; i++){
-    //     plt::plot(x,T.col(i))
-    // }
 
 
     Resol res = Resol(0.05,0.01,false);
